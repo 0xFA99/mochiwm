@@ -17,7 +17,7 @@ section '.text' executable
     public      _grab_keys
 
 _grab_keys:
-    push        r12
+    push        r12         ; <----- END ?!?!?! WTFFFFF
     push        r13
     sub         rsp, 8
 

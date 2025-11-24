@@ -3,6 +3,11 @@ XCB_MOD_MASK_1                          equ 8
 XCB_MOD_MASK_SHIFT                      equ 1
 XCB_CW_EVENT_MASK                       equ 2048
 XCB_GRAB_MODE_ASYNC                     equ 1
+XCB_MAP_REQUEST                         equ 20
+XCB_UNMAP_NOTIFY                        equ 18
+XCB_BUTTON_PRESS                        equ 4
+XCB_KEY_PRESS                           equ 2
+XCB_ENTER_NOTIFY                        equ 7
 
 ; Key codes
 XK_Tab                                  equ 0xff09

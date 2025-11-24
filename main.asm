@@ -4,6 +4,7 @@ format ELF64
     include     'consts.inc'
 
     extrn       write
+    extrn       free
 
     extrn       xcb_connect
     extrn       xcb_connection_has_error
@@ -12,6 +13,8 @@ format ELF64
     extrn       xcb_setup_roots_iterator
     extrn       xcb_change_window_attributes_checked
     extrn       xcb_request_check
+    extrn       xcb_flush
+    extrn       xcb_wait_for_event
 
     extrn       _get_color_pixel
     extrn       _grab_keys
@@ -45,7 +48,7 @@ _start:
 
     mov         rdi, [XConnection]
     ; mov         esi, [XWindowRoot]
-    mov         esi, eax
+    mov         esi, eax                    ; x window root
     mov         edx, XCB_CW_EVENT_MASK
     lea         ecx, [event_mask_all]
     call        xcb_change_window_attributes_checked
@@ -55,11 +58,22 @@ _start:
     ; call        xcb_request_check
     ; jnz         .error_wm_run
 
-    mov         edi, 0x00FF00
-    call        _get_color_pixel
-    
     call        _grab_keys
-    ; call        _cleanup_xcb_connection
+
+    mov         rdi, [XConnection]
+    call        xcb_flush
+
+    mov         rdi, [XConnection]
+    call        xcb_wait_for_event
+    mov         [XEvent], rax
+
+    mov         eax, [rax]                  ; event->response_type
+    and         al, 127
+
+    ; TODO: HANDLE EVENT
+
+    mov         rdi, [XEvent]
+    call        free
 
     mov         rdi, [XConnection]
     call        xcb_disconnect
@@ -95,6 +109,7 @@ section '.bss' writeable
 
     XConnection     rq 1
     XScreen         rq 1
+    XEvent          rq 1
     XWindowRoot     rd 1
 
 section '.rodata'

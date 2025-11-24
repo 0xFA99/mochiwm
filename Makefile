@@ -5,8 +5,6 @@ BIN = mochiwm
 
 LDFLAGS = -dynamic-linker /lib64/ld-linux-x86-64.so.2 -lxcb -lxcb-keysyms -lc
 
-DEBUG_FASMFLAGS = -g
-
 all: $(BIN)
 
 debug-build: $(BIN)
@@ -23,7 +21,4 @@ clean:
 run: $(BIN)
 	./$(BIN)
 
-debug: debug-build
-	gdb ./$(BIN)
-
-.PHONY: all clean run debug debug-build
+.PHONY: all clean run debug
